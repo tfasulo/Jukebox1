@@ -46,6 +46,7 @@ public class JukeboxGUI extends JFrame{
 		this.setSize(600, 300);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
+		this.add(panel);
 		
 		
 		

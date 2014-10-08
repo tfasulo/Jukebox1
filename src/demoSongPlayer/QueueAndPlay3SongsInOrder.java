@@ -1,5 +1,6 @@
 package demoSongPlayer;
 
+import view.JukeboxGUI;
 import model.PlayList;
 import model.Song;
 
@@ -14,6 +15,8 @@ public class QueueAndPlay3SongsInOrder {
       + System.getProperty("file.separator");
 
   public static void main(String[] args) {
+	  
+	  JukeboxGUI view = new JukeboxGUI();
     // Assign the responsibility of queuing Songs and playing them in order, and not overlapping
     javax.swing.SwingUtilities.invokeLater(new Runnable() {
       public void run() {
