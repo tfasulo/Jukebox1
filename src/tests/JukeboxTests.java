@@ -51,6 +51,7 @@ public class JukeboxTests {
 		Song song1 = new Song("Blue Ridge Mountain Mist", 38, "Ralph Schuckett", "./songfiles/BlueRidgeMountainMist.mp3" );
 		songs.add(song1);
 		
+		
 		assertEquals(songs.getColumnName(0), "Artist");
 		assertEquals(songs.getColumnName(1), "Title");
 		assertEquals(songs.getColumnName(2), "Seconds");

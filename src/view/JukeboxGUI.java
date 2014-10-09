@@ -100,6 +100,11 @@ public class JukeboxGUI extends JFrame{
 			
 	}
 	
+//	public boolean isSongPlayable(){
+//		if ()
+//
+//	}
+	
 	public void addActionListeners(){
 		login.addActionListener(new LoginListener());
 	}
