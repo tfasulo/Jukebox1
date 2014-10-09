@@ -2,13 +2,14 @@ package model;
 
 public class Student {
 	
+	private int password;
 	private String id;
 	private int secondsLeft;
 	private int songsPlayedToday;
 	
-	public Student(String id){
-		
-		this.id = id;
+	public Student(int password){
+	
+		this.password=password;
 		this.secondsLeft = 1500*60;
 		this.songsPlayedToday = 0;
 	}
@@ -32,5 +33,9 @@ public class Student {
 	
 	public void updateSongsPlayedToday(){
 		songsPlayedToday++;
+	}
+	
+	public int getPassword(){
+		return password;
 	}
 }

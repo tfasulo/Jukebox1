@@ -1,8 +1,17 @@
 package demoSongPlayer;
 
+
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+import songplayer.EndOfSongEvent;
+import songplayer.EndOfSongListener;
 import view.JukeboxGUI;
+import model.CardReader;
 import model.PlayList;
 import model.Song;
+import model.Student;
+import model.StudentCollection;
 
 // This is Rick's version for a separate test that a type exists to queue up songs and
 // play them in FIFO order entirely and without overlapping.  This code needs a Song type
@@ -15,9 +24,16 @@ public class QueueAndPlay3SongsInOrder {
       + System.getProperty("file.separator");
 
   public static void main(String[] args) {
+
+	  CardReader reader = new CardReader();
 	  
-	  JukeboxGUI view = new JukeboxGUI();
+
+
+	  
+	  
+	  
     // Assign the responsibility of queuing Songs and playing them in order, and not overlapping
+	  
     javax.swing.SwingUtilities.invokeLater(new Runnable() {
       public void run() {
         PlayList playList = new PlayList();
@@ -27,13 +43,19 @@ public class QueueAndPlay3SongsInOrder {
         Song b = (new Song("Flute", 7, "Sun Microsytems", baseDir + "flute.aif"));
         Song c = (new Song("Blue Ridge Mountain Mist", 39, "Schuckett, Ralph",
             baseDir + "BlueRidgeMountainMist.mp3"));
-      
+        
+
         // Play 3 songs in FIFO order
-        playList.queueUpNextSong(a);
-        playList.queueUpNextSong(b);
-        playList.queueUpNextSong(c);  
+//        playList.queueUpNextSong(a);
+//        playList.queueUpNextSong(b);
+//        playList.queueUpNextSong(c);  
       }
     });
+    
+	  new JukeboxGUI();
   }
+  
+  
+
 }
 

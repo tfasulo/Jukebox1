@@ -6,8 +6,8 @@ public class Date extends GregorianCalendar{
 
 	private GregorianCalendar date;
 	
-	public Date(){
+	public Date(GregorianCalendar date){
 		
-		date = new GregorianCalendar();
+		this.date=date;
 	}
 }

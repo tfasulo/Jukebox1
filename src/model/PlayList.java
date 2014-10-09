@@ -1,12 +1,9 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Queue;
-
-
-
-
-
 import songplayer.EndOfSongEvent;
 import songplayer.EndOfSongListener;
 import songplayer.SongPlayer;
@@ -14,16 +11,37 @@ import songplayer.SongPlayer;
 public class PlayList {
 
 	ArrayList<Song> playlist;
-	
-	
+
+
 	public PlayList(){
-		
+
 		playlist = new ArrayList<Song>();
 	}
-	
+
 	public void queueUpNextSong(Song song){
-		playlist.add(song);
-		
+		ObjectWaitingForSongToEnd waiter = new ObjectWaitingForSongToEnd();
+		if (song.getPlaysToday()<5){
+			playlist.add(song);
+			SongPlayer.playFile(waiter, song.getFileName());
+			song.played();
+
+		}
+		else{
+			
+		}
+
 	}
-	
+
+
+
+	private static class ObjectWaitingForSongToEnd implements EndOfSongListener {
+
+		public void songFinishedPlaying(EndOfSongEvent eosEvent) {
+			System.out.print("Finished " + eosEvent.fileName());
+			GregorianCalendar finishedAt = eosEvent.finishedTime();
+			System.out.println(" at " + finishedAt.get(Calendar.HOUR_OF_DAY) + ":"
+					+ finishedAt.get(Calendar.MINUTE) + ":"
+					+ finishedAt.get(Calendar.SECOND));
+		}
+	}
 }
