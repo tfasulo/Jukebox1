@@ -10,17 +10,17 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
-public class SongCollection implements ListModel<Song>, TableModel{
+public class SongCollection implements /*ListModel<Song>,*/ TableModel{
 	
 	private ArrayList<Song> songs;
-	private LinkedList<ListDataListener> listDataListeners;
+	//private LinkedList<ListDataListener> listDataListeners;
 	private LinkedList<TableModelListener> tableModelListeners;
 	private int columnCount = 3;
 	
 	public SongCollection(){
 
 		songs = new ArrayList<Song>();
-		listDataListeners = new LinkedList<ListDataListener>();
+		//listDataListeners = new LinkedList<ListDataListener>();
 		tableModelListeners = new LinkedList<TableModelListener>();
 	}
 	
@@ -38,41 +38,41 @@ public class SongCollection implements ListModel<Song>, TableModel{
 	
 	private void update(){
 		
-		for(ListDataListener ldl : listDataListeners){
-			ldl.contentsChanged(new ListDataEvent(this, ListDataEvent.CONTENTS_CHANGED, 0, songs.size()));
-		}
+//		for(ListDataListener ldl : listDataListeners){
+//			ldl.contentsChanged(new ListDataEvent(this, ListDataEvent.CONTENTS_CHANGED, 0, songs.size()));
+//		}
 		for(TableModelListener tml : tableModelListeners){
 			tml.tableChanged(new TableModelEvent(this));
 		}
 	}
 
-	@Override
-	public void addListDataListener(ListDataListener l) {
-		
-		listDataListeners.add(l);
-	}
-
-	@Override
-	public Song getElementAt(int index) {
-
-		if(index < 0 || index > songs.size()){
-			return null;
-		}
-		
-		return songs.get(index);
-	}
-
-	@Override
-	public int getSize() {
-
-		return songs.size();
-	}
-
-	@Override
-	public void removeListDataListener(ListDataListener l) {
-
-		listDataListeners.remove(l);
-	}
+//	@Override
+//	public void addListDataListener(ListDataListener l) {
+//		
+//		listDataListeners.add(l);
+//	}
+//
+//	@Override
+//	public Song getElementAt(int index) {
+//
+//		if(index < 0 || index > songs.size()){
+//			return null;
+//		}
+//		
+//		return songs.get(index);
+//	}
+//
+//	@Override
+//	public int getSize() {
+//
+//		return songs.size();
+//	}
+//
+//	@Override
+//	public void removeListDataListener(ListDataListener l) {
+//
+//		listDataListeners.remove(l);
+//	}
 
 	@Override
 	public void addTableModelListener(TableModelListener l) {

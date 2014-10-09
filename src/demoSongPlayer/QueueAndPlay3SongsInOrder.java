@@ -38,9 +38,9 @@ public class QueueAndPlay3SongsInOrder {
 			  Song c = (new Song("Blue Ridge Mountain Mist", 39, "Schuckett, Ralph", baseDir + "BlueRidgeMountainMist.mp3"));
         
 			  // Play 3 songs in FIFO order
-			  //playList.queueUpNextSong(a);
-			  //playList.queueUpNextSong(b);
-			  //playList.queueUpNextSong(c);  
+			  playList.queueUpNextSong(a);
+			  playList.queueUpNextSong(b);
+			  playList.queueUpNextSong(c);  
      	}
     });
     

@@ -3,6 +3,7 @@ package tests;
 import static org.junit.Assert.*;
 import model.CardReader;
 import model.Song;
+import model.SongCollection;
 import model.Student;
 import model.StudentCollection;
 
@@ -29,6 +30,11 @@ public class JukeboxTests {
 		cardReader.validate("Chris", "2222", students);
 		assertTrue(students.getStudent("Chris").getAuthenticatedStatus());
 		
+		assertFalse(cardReader.validate("Jason", "1111", students));
+		
+		cardReader.validate("Chris", "3333", students);
+		assertFalse(students.getStudent("Chris").getAuthenticatedStatus());
+		
 		assertFalse(students.getStudent("River").getAuthenticatedStatus());
 		cardReader.validate("River", "3333", students);
 		assertTrue(students.getStudent("River").getAuthenticatedStatus());
@@ -39,9 +45,32 @@ public class JukeboxTests {
 	}
 	
 	@Test
-	public void testSongPlayedFiveTimes(){
+	public void testSongCollection(){
 		
+		SongCollection songs = new SongCollection();
 		Song song1 = new Song("Blue Ridge Mountain Mist", 38, "Ralph Schuckett", "./songfiles/BlueRidgeMountainMist.mp3" );
+		songs.add(song1);
+		
+		assertEquals(songs.getColumnName(0), "Artist");
+		assertEquals(songs.getColumnName(1), "Title");
+		assertEquals(songs.getColumnName(2), "Seconds");
+		
+		assertEquals(songs.getColumnCount(), 3);
+		
+		assertEquals(songs.getRowCount(), 1);
+		
+		assertEquals(songs.getValueAt(0, 0), "Ralph Schuckett");
+		assertEquals(songs.getValueAt(0, 1), "Blue Ridge Mountain Mist");
+		assertEquals(songs.getValueAt(0, 2), 38);
+		
+		assertEquals(songs.getColumnClass(0), String.class);
+		assertEquals(songs.getColumnClass(1), String.class);
+		assertEquals(songs.getColumnClass(2), Integer.class);
+		
+		songs.remove(song1);
+		
+		assertEquals(songs.getRowCount(), 0);
+		
 		assertEquals(song1.getPlaysToday(), 0);
 		song1.played();
 		assertEquals(song1.getPlaysToday(), 1);
@@ -53,6 +82,9 @@ public class JukeboxTests {
 		assertEquals(song1.getPlaysToday(), 4);
 		song1.played();
 		assertEquals(song1.getPlaysToday(), 5);
+		
+		assertEquals(song1.getFileName(), "./songfiles/BlueRidgeMountainMist.mp3");
+		
 	}
 
 }

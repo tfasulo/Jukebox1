@@ -119,13 +119,9 @@ public class JukeboxGUI extends JFrame{
 				state.setText(ID + " is now logged in.");
 				currentStudent = students.getStudent(ID);
 			}
-			
 		}
 	}
+	
+	
+	
 }
-
-//try{
-//pass = Integer.parseInt(passtext.getText());
-//} catch (Exception e2){
-//System.out.println("ERROR: Enter an integer password.");
-//}
