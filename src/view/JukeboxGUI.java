@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -32,8 +33,9 @@ public class JukeboxGUI extends JFrame{
 	private JButton login = new JButton("Login");
 	private JButton logout = new JButton("Sign Out");
 	private JTextField nametext = new JTextField("");
-	private JTextField passtext = new JTextField("");
+	private JTextField passtext = new JPasswordField();
 	private StudentCollection students = new StudentCollection();
+	private Student currentStudent = new Student(null, null);
 	private CardReader reader = new CardReader();
 	boolean validated = false;
 	private JLabel name = new JLabel("Account Name");
@@ -43,10 +45,10 @@ public class JukeboxGUI extends JFrame{
 	
 	public JukeboxGUI(){
 		
-		students.addStudent("Ali", new Student(1111));
-		students.addStudent("Chris", new Student(2222));
-		students.addStudent("River", new Student(3333));
-		students.addStudent("Ryan", new Student(4444));
+		students.addStudent("Ali", new Student("Ali", "1111"));
+		students.addStudent("Chris", new Student("Chris", "2222"));
+		students.addStudent("River", new Student("River", "3333"));
+		students.addStudent("Ryan", new Student("Ryan", "4444"));
 		
 		setupTable();
 		setupAuthenticationScreen();
@@ -107,26 +109,23 @@ public class JukeboxGUI extends JFrame{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String ID = nametext.getText();
-			int pass=-1;
+			String pass= passtext.getText();
 			
-			try{
-				pass = Integer.parseInt(passtext.getText());
-			} catch (Exception e2){
-				System.out.println("ERROR: Enter an integer password.");
-			}
+			reader.validate(ID, pass, students);
 
-			validated = reader.validate(ID, pass, students);
+			validated = students.getStudent(ID).getAuthenticatedStatus();
 
-			
 			if (validated==true){
 				state.setText(ID + " is now logged in.");
+				currentStudent = students.getStudent(ID);
 			}
 			
-			
-
 		}
-		
 	}
-	
-	
 }
+
+//try{
+//pass = Integer.parseInt(passtext.getText());
+//} catch (Exception e2){
+//System.out.println("ERROR: Enter an integer password.");
+//}

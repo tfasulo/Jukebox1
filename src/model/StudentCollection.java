@@ -16,6 +16,7 @@ public class StudentCollection extends HashMap<String, Student>{
 	}
 	
 	public Student getStudent(String name){
+		
 		return students.get(name);
 	}
 }

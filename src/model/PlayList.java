@@ -12,27 +12,24 @@ public class PlayList {
 
 	ArrayList<Song> playlist;
 
-
 	public PlayList(){
 
 		playlist = new ArrayList<Song>();
 	}
 
 	public void queueUpNextSong(Song song){
+		
 		ObjectWaitingForSongToEnd waiter = new ObjectWaitingForSongToEnd();
+		
 		if (song.getPlaysToday()<5){
 			playlist.add(song);
 			SongPlayer.playFile(waiter, song.getFileName());
 			song.played();
-
 		}
 		else{
-			
+			System.out.println("This song has already been played 5 times today");
 		}
-
 	}
-
-
 
 	private static class ObjectWaitingForSongToEnd implements EndOfSongListener {
 
