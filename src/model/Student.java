@@ -1,4 +1,16 @@
+/* Authors: Trevor Fasulo, Jason Tom
+ * Professor: Rick Mercer
+ * TA: Travis Stratton
+ * Description: Student holds the student information.
+ */
 package model;
+
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.GregorianCalendar;
+import java.util.Iterator;
+
+
 
 public class Student {
 	
@@ -7,6 +19,7 @@ public class Student {
 	private int secondsLeft;
 	private int songsPlayedToday;
 	private boolean loggedIn;
+	private GregorianCalendar lastPlayed = new GregorianCalendar();
 	
 	public Student(String id, String password){
 		
@@ -55,5 +68,46 @@ public class Student {
 	public boolean getAuthenticatedStatus(){
 		
 		return loggedIn;
+	}
+
+	public void playSong(Song song, GregorianCalendar dateplayed, SongCollection songs, StudentCollection students) {
+		
+		if (dateplayed.get(Calendar.YEAR)==lastPlayed.get(Calendar.YEAR) 
+			&& dateplayed.get(Calendar.MONTH)==lastPlayed.get(Calendar.MONTH)
+			&& dateplayed.get(Calendar.DAY_OF_MONTH)==lastPlayed.get(Calendar.DAY_OF_MONTH)){
+			
+		}
+		else{
+			for (Song s : songs.getArrayList()){
+				s.resetPlays();
+			}
+			Collection<Student> collection;
+			collection = students.values();
+			Iterator itr = (Iterator) collection.iterator();
+			while (itr.hasNext()){
+				Student st = (Student) itr.next();
+				st.resetPlays();
+				st.lastPlayed = dateplayed;
+			}
+			
+			
+		}
+		
+		if (songsPlayedToday<2)
+		{
+			if (song.getPlaysToday()<5)
+			{
+
+				
+				songsPlayedToday++;
+				song.played();
+				
+			}
+		}
+		
+	}
+	
+	public void resetPlays(){
+		songsPlayedToday=0;
 	}
 }

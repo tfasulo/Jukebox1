@@ -1,3 +1,9 @@
+/* Authors: Trevor Fasulo, Jason Tom
+ * Professor: Rick Mercer
+ * TA: Travis Stratton
+ * Description: JukeboxGUI lays out a Jframe that has a tableview
+ * of songs and a login/out panel.
+ */
 package view;
 
 import java.awt.BorderLayout;
@@ -70,6 +76,7 @@ public class JukeboxGUI extends JFrame{
 		songs.add(new Song("Tada", 2, "Microsoft", "./songfiles/tada.wav" ));
 		songs.add(new Song("Untameable Fire", 282, "Pierre Langer", "./songfiles/UntameableFire.mp3" ));
 		
+		
 		table = new JTable(songs);
 		table.setRowSorter(new TableRowSorter<TableModel>(table.getModel()));
 	
@@ -99,11 +106,25 @@ public class JukeboxGUI extends JFrame{
 		panel.add(authScreen, BorderLayout.SOUTH);
 			
 	}
+	public boolean isSongPlayable(Song song){
+		
+		if (currentStudent.getId()!=null){
+			
+			if (song.getPlaysToday()<5){
+				
+				if (currentStudent.getSongsPlayedToday()<2){
+					
+					return true;
+				}
+			}
+		}
+		
+		return false;
+
+		
+	}
 	
-//	public boolean isSongPlayable(){
-//		if ()
-//
-//	}
+
 	
 	public void addActionListeners(){
 		login.addActionListener(new LoginListener());
@@ -116,9 +137,9 @@ public class JukeboxGUI extends JFrame{
 			String ID = nametext.getText();
 			String pass= passtext.getText();
 			
-			reader.validate(ID, pass, students);
+			validated = reader.validate(ID, pass, students);
 
-			validated = students.getStudent(ID).getAuthenticatedStatus();
+//			validated = students.getStudent(ID).getAuthenticatedStatus();
 
 			if (validated==true){
 				state.setText(ID + " is now logged in.");

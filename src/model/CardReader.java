@@ -1,3 +1,8 @@
+/* Authors: Trevor Fasulo, Jason Tom
+ * Professor: Rick Mercer
+ * TA: Travis Stratton
+ * Description: Card Reader validates the student ID and password.
+ */
 package model;
 
 public class CardReader{

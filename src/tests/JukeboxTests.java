@@ -1,7 +1,17 @@
+/* Authors: Trevor Fasulo, Jason Tom
+ * Professor: Rick Mercer
+ * TA: Travis Stratton
+ * Description: JukeboxTests tests the code coverage of Jukebox.
+ */
 package tests;
 
 import static org.junit.Assert.*;
+
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 import model.CardReader;
+import model.PlayList;
 import model.Song;
 import model.SongCollection;
 import model.Student;
@@ -10,6 +20,25 @@ import model.StudentCollection;
 import org.junit.Test;
 
 public class JukeboxTests {
+	
+	Student Ali = new Student("Ali","1111");
+	Student Chris = new Student("Chris", "2222");
+	Student River = new Student("River", "3333");
+	Student Ryan = new Student("Ryan", "4444");
+	
+	Song blue = new Song("Blue Ridge Mountain Mist", 38, "Ralph Schuckett", "./songfiles/BlueRidgeMountainMist.mp3");
+	Song tumbao = new Song("Determined Tumbao", 20, "FreePlay Music", "./songfiles/DeterminedTumbao.mp3" );
+	Song flute = new Song("Flute", 5, "Sun Microsystems", "./songfiles/flute.aif" );
+	Song space = new Song("Space Music", 6, "Unknown", "./songfiles/spacemusic.au");
+	Song swing = new Song("Swing Cheese", 15, "FreePlay Music", "./songfiles/SwingCheese.mp3" );
+	Song tada = new Song("Tada", 2, "Microsoft", "./songfiles/tada.wav" );
+	Song fire = new Song("Untameable Fire", 282, "Pierre Langer", "./songfiles/UntameableFire.mp3" );
+	
+	SongCollection songs = new SongCollection();
+	StudentCollection students = new StudentCollection();
+	
+	PlayList playlist = new PlayList();
+
 	
 	@Test
 	public void testStudentAuthentication(){
@@ -85,6 +114,95 @@ public class JukeboxTests {
 		assertEquals(song1.getPlaysToday(), 5);
 		
 		assertEquals(song1.getFileName(), "./songfiles/BlueRidgeMountainMist.mp3");
+		
+	}
+	
+	@Test
+	public void testSongPlay(){
+		
+//		Song song = new Song("Blue Ridge Mountain Mist", 38, "Ralph Schuckett", "./songfiles/BlueRidgeMountainMist.mp3");
+//		Ali.playSong(song);
+		
+	}
+	
+	@Test
+	public void testRefreshCount(){
+		GregorianCalendar day1 = new GregorianCalendar();
+		GregorianCalendar day2 = new GregorianCalendar();
+		day2.set(day1.get(Calendar.YEAR), day1.get(Calendar.MONTH), day1.get(Calendar.DAY_OF_MONTH)+1);
+		
+		playlist.queueUpNextSong(blue);
+		
+		songs.add(blue);
+		songs.add(tumbao);
+		songs.add(flute);
+		songs.add(space);
+		songs.add(swing);
+		songs.add(tada);
+		songs.add(fire);
+
+		students.addStudent("Ali", Ali);
+		students.addStudent("Chris", Chris);
+		students.addStudent("River", River);
+		students.addStudent("Ryan", Ryan);
+		
+		assertEquals(Chris.getSongsPlayedToday(),0);
+		Chris.playSong(blue, day1, songs, students);
+		assertEquals(Chris.getSongsPlayedToday(),1);
+		Chris.playSong(blue, day1, songs, students);
+		assertEquals(Chris.getSongsPlayedToday(),2);
+		Chris.playSong(blue, day1, songs, students);
+		assertEquals(Chris.getSongsPlayedToday(),2);
+		assertEquals(blue.getPlaysToday(),2);
+		River.playSong(blue, day1, songs, students);
+		assertEquals(blue.getPlaysToday(),3);
+		assertEquals(River.getSongsPlayedToday(),1);
+		River.playSong(blue, day1, songs, students);
+		assertEquals(blue.getPlaysToday(),4);
+		assertEquals(River.getSongsPlayedToday(),2);
+		River.playSong(blue, day1, songs, students);
+		assertEquals(blue.getPlaysToday(),4);
+		assertEquals(River.getSongsPlayedToday(),2);
+		Ryan.playSong(blue, day1, songs, students);
+		assertEquals(blue.getPlaysToday(),5);
+		assertEquals(Ryan.getSongsPlayedToday(),1);
+		Ryan.playSong(blue, day1, songs, students);
+		assertEquals(blue.getPlaysToday(),5);
+		assertEquals(Ryan.getSongsPlayedToday(),1);
+		
+		
+		Chris.playSong(blue, day2, songs, students);
+		assertEquals(Chris.getSongsPlayedToday(),1);
+		Chris.playSong(blue, day2, songs, students);
+		assertEquals(Chris.getSongsPlayedToday(),2);
+		Chris.playSong(blue, day2, songs, students);
+		assertEquals(Chris.getSongsPlayedToday(),2);
+		assertEquals(blue.getPlaysToday(),2);
+		River.playSong(blue, day2, songs, students);
+		assertEquals(blue.getPlaysToday(),3);
+		assertEquals(River.getSongsPlayedToday(),1);
+		River.playSong(blue, day2, songs, students);
+		assertEquals(blue.getPlaysToday(),4);
+		assertEquals(River.getSongsPlayedToday(),2);
+		River.playSong(blue, day2, songs, students);
+		assertEquals(blue.getPlaysToday(),4);
+		assertEquals(River.getSongsPlayedToday(),2);
+		Ryan.playSong(blue, day2, songs, students);
+		assertEquals(blue.getPlaysToday(),5);
+		assertEquals(Ryan.getSongsPlayedToday(),1);
+		Ryan.playSong(blue, day2, songs, students);
+		assertEquals(blue.getPlaysToday(),5);
+		assertEquals(Ryan.getSongsPlayedToday(),1);
+		
+//		Chris.playSong(blue, day2);
+//		assertEquals(Chris.getSongsPlayedToday(),1);
+//		Chris.playSong(blue, day2);
+//		assertEquals(Chris.getSongsPlayedToday(),2);
+		
+		
+		
+		
+		
 		
 	}
 

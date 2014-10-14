@@ -1,22 +1,28 @@
+/* Authors: Trevor Fasulo, Jason Tom
+ * Professor: Rick Mercer
+ * TA: Travis Stratton
+ * Description: StudentCollection is a hashmap of students.
+ */
 package model;
 
 import java.util.HashMap;
 
-public class StudentCollection{ //extends HashMap<String, Student>{
+public class StudentCollection extends HashMap<String, Student>{
 	
-	private HashMap<String, Student> students;
+	//private HashMap<String, Student> students;
 	
 	public StudentCollection(){
-		
-		students = new HashMap<String, Student>();
+		super();
+		//students = new HashMap<String, Student>();
 	}
 	
 	public void addStudent(String name, Student student){
-		students.put(name, student);
+		put(name,student);
+		//students.put(name, student);
 	}
 	
 	public Student getStudent(String name){
-		
-		return students.get(name);
+		return get(name);
+		//return students.get(name);
 	}
 }

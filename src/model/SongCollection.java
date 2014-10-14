@@ -1,3 +1,8 @@
+/* Authors: Trevor Fasulo, Jason Tom
+ * Professor: Rick Mercer
+ * TA: Travis Stratton
+ * Description: Song Collection is an ArrayList of songs.
+ */
 package model;
 
 import java.util.ArrayList;
@@ -35,15 +40,18 @@ public class SongCollection implements /*ListModel<Song>,*/ TableModel{
 		songs.remove(song);
 		update();
 	}
+	public ArrayList<Song> getArrayList(){
+		return songs;
+	}
 	
 	private void update(){
 		
 //		for(ListDataListener ldl : listDataListeners){
 //			ldl.contentsChanged(new ListDataEvent(this, ListDataEvent.CONTENTS_CHANGED, 0, songs.size()));
 //		}
-		for(TableModelListener tml : tableModelListeners){
-			tml.tableChanged(new TableModelEvent(this));
-		}
+//		for(TableModelListener tml : tableModelListeners){
+//			tml.tableChanged(new TableModelEvent(this));
+//		}
 	}
 
 //	@Override
@@ -77,7 +85,7 @@ public class SongCollection implements /*ListModel<Song>,*/ TableModel{
 	@Override
 	public void addTableModelListener(TableModelListener l) {
 
-		tableModelListeners.add(l);
+//		tableModelListeners.add(l);
 	}
 
 	@Override

@@ -1,3 +1,8 @@
+/* Authors: Trevor Fasulo, Jason Tom
+ * Professor: Rick Mercer
+ * TA: Travis Stratton
+ * Description: This plays three songs and instantiates the Jukebox GUI.
+ */
 package demoSongPlayer;
 
 
@@ -9,7 +14,6 @@ import songplayer.EndOfSongListener;
 import songplayer.SongPlayer;
 import view.JukeboxGUI;
 import model.CardReader;
-import model.JukeboxController;
 import model.PlayList;
 import model.Song;
 import model.Student;
@@ -28,11 +32,12 @@ public class QueueAndPlay3SongsInOrder {
   public static void main(String[] args) {
 
 	  // Assign the responsibility of queuing Songs and playing them in order, and not overlapping
+	  
 	  javax.swing.SwingUtilities.invokeLater(	new Runnable() {
 		  public void run() {
 			  
 			  PlayList playList = new PlayList();
-
+			 
 			  Song a = (new Song("Space Music", 7, "Sun Microsytems", baseDir + "spacemusic.au"));
 			  Song b = (new Song("Flute", 7, "Sun Microsytems", baseDir + "flute.aif"));
 			  Song c = (new Song("Blue Ridge Mountain Mist", 39, "Schuckett, Ralph", baseDir + "BlueRidgeMountainMist.mp3"));

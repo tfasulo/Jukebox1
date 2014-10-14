@@ -1,3 +1,8 @@
+/* Authors: Trevor Fasulo, Jason Tom
+ * Professor: Rick Mercer
+ * TA: Travis Stratton
+ * Description: Song holds the song information.
+ */
 package model;
 
 import java.util.concurrent.Delayed;
@@ -44,5 +49,9 @@ public class Song{
 		public void played(){
 			
 			playsToday++;
+		}
+		
+		public void resetPlays(){
+			playsToday=0;
 		}
 }
