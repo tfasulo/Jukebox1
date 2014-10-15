@@ -5,6 +5,7 @@
  */
 package model;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
@@ -12,7 +13,7 @@ import java.util.Iterator;
 
 
 
-public class Student {
+public class Student implements Serializable{
 	
 	private String password;
 	private String id;
@@ -101,6 +102,7 @@ public class Student {
 				
 				songsPlayedToday++;
 				song.played();
+				secondsLeft-=song.getTime();
 				
 			}
 		}

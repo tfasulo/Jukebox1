@@ -5,9 +5,10 @@
  */
 package model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class StudentCollection extends HashMap<String, Student>{
+public class StudentCollection extends HashMap<String, Student> implements Serializable{
 	
 	//private HashMap<String, Student> students;
 	

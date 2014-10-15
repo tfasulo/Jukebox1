@@ -8,6 +8,7 @@ package model;
 import java.util.ArrayDeque;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import songplayer.EndOfSongEvent;
@@ -21,6 +22,7 @@ public class PlayList {
 	GregorianCalendar currentPlay;
 	GregorianCalendar timePlayed;
 	ObjectWaitingForSongToEnd waiter = new ObjectWaitingForSongToEnd();
+	
 
 	public PlayList(){
 		
@@ -43,7 +45,7 @@ public class PlayList {
 
 	}
 	
-	  private class ObjectWaitingForSongToEnd implements EndOfSongListener {
+	  public class ObjectWaitingForSongToEnd implements EndOfSongListener {
 
 		    public void songFinishedPlaying(EndOfSongEvent eosEvent) {
 		    	
@@ -51,13 +53,29 @@ public class PlayList {
 		    	if (playlist.peek()!=null){
 		    		SongPlayer.playFile(waiter, playlist.peek().getFileName());
 		    	}
-//		      System.out.print("Finished " + eosEvent.fileName());
-//		      GregorianCalendar finishedAt = eosEvent.finishedTime();
-//		      System.out.println(" at " + finishedAt.get(Calendar.HOUR_OF_DAY) + ":"
-//		          + finishedAt.get(Calendar.MINUTE) + ":"
-//		          + finishedAt.get(Calendar.SECOND));
 		    }
 		  }
+	  
+	  public String toString(){
+		  	String songString="";
+			Iterator itr = (Iterator) playlist.iterator();
+			while (itr.hasNext()){
+				Song s = (Song) itr.next();
+				String seconds = Integer.toString(s.getTime()%60);
+				
+				if (s.getTime()%60<10){
+					seconds="0"+seconds;
+				}
+				songString+=s.getSongName() + " by " + s.getSongArtist() + " " + s.getTime()/60 + ":" + seconds;
+				songString+="\n";
+			}
+			
+			
+			
+			return songString;
+	  }
+	  
+
 
 
 

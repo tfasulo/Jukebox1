@@ -5,10 +5,11 @@
  */
 package model;
 
+import java.io.Serializable;
 import java.util.concurrent.Delayed;
 import java.util.concurrent.TimeUnit;
 
-public class Song{
+public class Song implements Serializable{
 
 		private String name;
 		private String artist;

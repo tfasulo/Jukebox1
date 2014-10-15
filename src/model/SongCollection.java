@@ -5,6 +5,7 @@
  */
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -15,7 +16,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
-public class SongCollection implements /*ListModel<Song>,*/ TableModel{
+public class SongCollection implements TableModel, Serializable{
 	
 	private ArrayList<Song> songs;
 	//private LinkedList<ListDataListener> listDataListeners;
@@ -40,6 +41,16 @@ public class SongCollection implements /*ListModel<Song>,*/ TableModel{
 		songs.remove(song);
 		update();
 	}
+	
+	public Song getElementAt(int index){
+		if (index<0 || index > songs.size()){
+			return null;
+		}
+		else{
+			return songs.get(index);
+		}
+	}
+	
 	public ArrayList<Song> getArrayList(){
 		return songs;
 	}
