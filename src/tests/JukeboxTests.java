@@ -1,8 +1,9 @@
 /* Authors: Trevor Fasulo, Jason Tom
  * Professor: Rick Mercer
  * TA: Travis Stratton
- * Description: JukeboxTests tests the code coverage of Jukebox.
+ * Description: This class is JukeboxTests and are the J unit tests for the model/GUI
  */
+
 package tests;
 
 import static org.junit.Assert.*;
@@ -36,9 +37,7 @@ public class JukeboxTests {
 	
 	SongCollection songs = new SongCollection();
 	StudentCollection students = new StudentCollection();
-	
 	PlayList playlist = new PlayList();
-
 	
 	@Test
 	public void testStudentAuthentication(){
@@ -80,7 +79,6 @@ public class JukeboxTests {
 		Song song1 = new Song("Blue Ridge Mountain Mist", 38, "Ralph Schuckett", "./songfiles/BlueRidgeMountainMist.mp3" );
 		songs.add(song1);
 		
-		
 		assertEquals(songs.getColumnName(0), "Artist");
 		assertEquals(songs.getColumnName(1), "Title");
 		assertEquals(songs.getColumnName(2), "Seconds");
@@ -114,19 +112,11 @@ public class JukeboxTests {
 		assertEquals(song1.getPlaysToday(), 5);
 		
 		assertEquals(song1.getFileName(), "./songfiles/BlueRidgeMountainMist.mp3");
-		
-	}
-	
-	@Test
-	public void testSongPlay(){
-		
-//		Song song = new Song("Blue Ridge Mountain Mist", 38, "Ralph Schuckett", "./songfiles/BlueRidgeMountainMist.mp3");
-//		Ali.playSong(song);
-		
 	}
 	
 	@Test
 	public void testRefreshCount(){
+
 		GregorianCalendar day1 = new GregorianCalendar();
 		GregorianCalendar day2 = new GregorianCalendar();
 		day2.set(day1.get(Calendar.YEAR), day1.get(Calendar.MONTH), day1.get(Calendar.DAY_OF_MONTH)+1);
@@ -170,7 +160,6 @@ public class JukeboxTests {
 		assertEquals(blue.getPlaysToday(),5);
 		assertEquals(Ryan.getSongsPlayedToday(),1);
 		
-		
 		Chris.playSong(blue, day2, songs, students);
 		assertEquals(Chris.getSongsPlayedToday(),1);
 		Chris.playSong(blue, day2, songs, students);
@@ -193,17 +182,5 @@ public class JukeboxTests {
 		Ryan.playSong(blue, day2, songs, students);
 		assertEquals(blue.getPlaysToday(),5);
 		assertEquals(Ryan.getSongsPlayedToday(),1);
-		
-//		Chris.playSong(blue, day2);
-//		assertEquals(Chris.getSongsPlayedToday(),1);
-//		Chris.playSong(blue, day2);
-//		assertEquals(Chris.getSongsPlayedToday(),2);
-		
-		
-		
-		
-		
-		
 	}
-
 }

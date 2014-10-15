@@ -1,7 +1,8 @@
 /* Authors: Trevor Fasulo, Jason Tom
  * Professor: Rick Mercer
  * TA: Travis Stratton
- * Description: Song Collection is an ArrayList of songs.
+ * Description: Song Collection is an ArrayList of songs. You can get information regarding the song through the table
+ * because it implements tableModel and contains all the methods in order to get values from a table such as getColumnName etc.
  */
 package model;
 
@@ -18,23 +19,31 @@ import javax.swing.table.TableModel;
 
 public class SongCollection implements TableModel, Serializable{
 	
+	//the global variables used throughout the song collection
+	
 	private ArrayList<Song> songs;
-	//private LinkedList<ListDataListener> listDataListeners;
 	private LinkedList<TableModelListener> tableModelListeners;
 	private int columnCount = 3;
 	
+	/*the constructor for the song collection. It sets the table model listener
+	 *to a new listener and songs to a new array list.
+	 */
+
 	public SongCollection(){
 
 		songs = new ArrayList<Song>();
-		//listDataListeners = new LinkedList<ListDataListener>();
 		tableModelListeners = new LinkedList<TableModelListener>();
 	}
+	
+	//method used to add a song to the array list and update it in the table. Not used in our jukeBox
 	
 	public void add(Song song) {
 
 		songs.add(song);
 		update();
 	}
+	
+	//method used to remove a song from the array list and update it in the table. Not used in our jukeBox
 
 	public void remove(Song song) {
 
@@ -42,7 +51,10 @@ public class SongCollection implements TableModel, Serializable{
 		update();
 	}
 	
+	//This method returns a song in the array list
+	
 	public Song getElementAt(int index){
+		
 		if (index<0 || index > songs.size()){
 			return null;
 		}
@@ -51,54 +63,24 @@ public class SongCollection implements TableModel, Serializable{
 		}
 	}
 	
+	//This method returns every song in the song collection
+	
 	public ArrayList<Song> getArrayList(){
 		return songs;
 	}
 	
-	private void update(){
-		
-//		for(ListDataListener ldl : listDataListeners){
-//			ldl.contentsChanged(new ListDataEvent(this, ListDataEvent.CONTENTS_CHANGED, 0, songs.size()));
-//		}
-//		for(TableModelListener tml : tableModelListeners){
-//			tml.tableChanged(new TableModelEvent(this));
-//		}
-	}
-
-//	@Override
-//	public void addListDataListener(ListDataListener l) {
-//		
-//		listDataListeners.add(l);
-//	}
-//
-//	@Override
-//	public Song getElementAt(int index) {
-//
-//		if(index < 0 || index > songs.size()){
-//			return null;
-//		}
-//		
-//		return songs.get(index);
-//	}
-//
-//	@Override
-//	public int getSize() {
-//
-//		return songs.size();
-//	}
-//
-//	@Override
-//	public void removeListDataListener(ListDataListener l) {
-//
-//		listDataListeners.remove(l);
-//	}
+	//Used to update the table but not used in our jukeBox
+	
+	private void update(){}
 
 	@Override
-	public void addTableModelListener(TableModelListener l) {
+	public void addTableModelListener(TableModelListener l) {}
 
-//		tableModelListeners.add(l);
-	}
-
+	/*This method returns the class of each column row in the table
+	 *In this case, it returns a string for both the first and second columns
+	 *and returns an integer for the third column.
+	 */
+	
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
 
@@ -111,12 +93,19 @@ public class SongCollection implements TableModel, Serializable{
 		}
 		return null;
 	}
+	
+	//returns how many columns are in our table, which currently is 3
 
 	@Override
 	public int getColumnCount() {
 
 		return columnCount;
 	}
+	
+	/*This method returns the column name of each column row in the table.
+	 *The first row contains the "Artist" of the song. The second contains
+	 *the "Title" of the song and the final column contains the length of the song.
+	 */
 
 	@Override
 	public String getColumnName(int columnIndex) {
@@ -131,12 +120,21 @@ public class SongCollection implements TableModel, Serializable{
 		}
 		return null;
 	}
+	
+	//Returns how many songs are in the song collection
 
 	@Override
 	public int getRowCount() {
 
 		return songs.size();
 	}
+	
+	/*This method returns the object at a given index and column index.
+	 *For example, if its column 1 or 2 then it will return a string which
+	 *is either the song name or the artist name. For the third column it 
+	 *would return the song length but it only returns those attributes of
+	 *the song instead of the whole song.
+	 */
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
@@ -151,12 +149,16 @@ public class SongCollection implements TableModel, Serializable{
 		}
 		return null;
 	}
+	
+	//boolean to determine if the user can edit the cell or not. In this case, no.
 
 	@Override
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
 
 		return false;
 	}
+	
+	//A method to remove any table model listeners. Not used in our jukeBox.
 
 	@Override
 	public void removeTableModelListener(TableModelListener l) {
@@ -165,7 +167,5 @@ public class SongCollection implements TableModel, Serializable{
 	}
 
 	@Override
-	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-		
-	}
+	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {}
 }

@@ -1,8 +1,12 @@
 /* Authors: Trevor Fasulo, Jason Tom
  * Professor: Rick Mercer
  * TA: Travis Stratton
- * Description: JukeboxGUI lays out a Jframe that has a tableview
- * of songs and a login/out panel.
+ * Description: JukeboxGUI lays out a JFrame that contains a tableview
+ * of songs, a login/out panel, and a playList of all the songs in the queue.
+ * The GUI also contains functions to load and save the data so that it is persistent
+ * upon window closing. Finally, it contains all the action listeners/mouselisteners
+ * for clicking on a button such as log in/log out or playing a song by clicking on it
+ * through the table.
  */
 package view;
 
@@ -41,15 +45,17 @@ import model.SongCollection;
 import model.Student;
 import model.StudentCollection;
 
-
 public class JukeboxGUI extends JFrame{
 
+	//This is the main method to create a new instance of our JukeboxGUI.
+	
 	public static void main(String[] args){
 		
 		new JukeboxGUI();
-		
 	}
 
+	//Here is where we define all our global variables.
+	
 	private JTable table;
 	private SongCollection songs;
 	private JPanel panel = new JPanel();
@@ -69,11 +75,15 @@ public class JukeboxGUI extends JFrame{
 	private JLabel state = new JLabel("Please login");
 	private JLabel minsLeft = new JLabel("");
 	private JLabel playsLeft = new JLabel("");
-	private JScrollPane queue = new JScrollPane();
 	private PlayList playList = new PlayList();
 	private JTextArea queueText = new JTextArea();
 	private GregorianCalendar currentDate = new GregorianCalendar();
 
+	/*JukeboxGUI() is the constructor for our GUI. It allows the user to load the data that they saved
+	 *or to creates a new set of students and songs if data cannot be loaded. It also adds the tables,
+	 *authentication screen, and sets up all the action listeners.
+	 */
+	
 	public JukeboxGUI(){
 		
 		int answer = JOptionPane.showConfirmDialog(null, "Load Data?");
@@ -93,9 +103,6 @@ public class JukeboxGUI extends JFrame{
 			songs.add(new Song("Tada", 2, "Microsoft", "./songfiles/tada.wav" ));
 			songs.add(new Song("Untameable Fire", 282, "Pierre Langer", "./songfiles/UntameableFire.mp3" ));
 		}
-
-
-		
 		
 		setupTable();
 		setupAuthenticationScreen();
@@ -104,13 +111,14 @@ public class JukeboxGUI extends JFrame{
 		this.setSize(1000,400);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
-
 	}
+	
+	/*setupTable() creates a new sortable JTable of songs to display on the main JFrame. 
+	 *It also sets up the playList of all the songs in the queue and adds that to the main JFrame.
+	 */
 	
 	public void setupTable(){
 
-		
-		
 		table = new JTable(songs);
 		table.setRowSorter(new TableRowSorter<TableModel>(table.getModel()));
 	
@@ -123,13 +131,18 @@ public class JukeboxGUI extends JFrame{
 		
 		songsPlaying.setLayout(new BorderLayout());
 		songsPlaying.add(new JLabel("PlayList (song at top is playing)"), BorderLayout.NORTH);
-//		queue.add(queueText);
 		songsPlaying.add(queueText, BorderLayout.CENTER);
 		
 		this.setLayout(new GridLayout(1,2,10,0));
 		this.add(panel);
 		this.add(songsPlaying);
 	}
+	
+	/* This sets up the Authentication screen such as the log in/log out button.
+	 * It also displays the current student who is logged in, how many minutes they have left,
+	 * and how many plays they have left for that current day. Finally it adds the screen to
+	 * the main JFrame.
+	 */
 	
 	public void setupAuthenticationScreen(){
 
@@ -145,18 +158,20 @@ public class JukeboxGUI extends JFrame{
 		authScreen.add(playsLeft);
 		authScreen.add(minsLeft);
 		panel.add(authScreen, BorderLayout.SOUTH);
-			
 	}
+	
+	/*This method determines whether or not the song is playable. In order to do this, it determines
+	 *whether or not the currentStudent logged in has already played 2 songs today. If they have not
+	 *already played 2 songs then it determines if the song they want to play has already been played
+	 *5 times. If it has not, then it returns true that the song is able to be played. If not, it shows
+	 *an error message dialog explaining why the user cannot play that song.
+	 */
+	
 	public boolean isSongPlayable(Song song){
 		
-		boolean isPlayable = false;
-		
 		if (currentStudent!=null){
-			
 			if (song.getPlaysToday()<5){
-				
 				if (currentStudent.getSongsPlayedToday()<2){
-					
 					return true;
 				}
 			}
@@ -171,26 +186,30 @@ public class JukeboxGUI extends JFrame{
 		else if (!(song.getPlaysToday()<5)){
 			JOptionPane.showMessageDialog(this, "This song has been played too many times today, pick another song.");
 		}
-
 		
 		return false;
-
-		
 	}
 	
-
+	//This method adds the action listeners to the specific button/window/table/etc..
 	
 	public void addActionListeners(){
+		
 		login.addActionListener(new LoginListener());
 		logout.addActionListener(new LogoutListener());
 		table.addMouseListener(new ClickListener());
 		this.addWindowListener(new SaveDataListener());
 	}
 	
+	/*LoginListener sets up the JPanel when a student logs in to display their plays left, minutes left,
+	 *and displays their name saying they are logged in. Contains error checking in case the username and
+	 *password do not match and displays an error dialog.
+	 */
+	
 	private class LoginListener implements ActionListener
 	{
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			
 			String ID = nametext.getText();
 			String pass= passtext.getText();
 			
@@ -202,8 +221,16 @@ public class JukeboxGUI extends JFrame{
 				minsLeft.setText("Minutes left: " + currentStudent.getSecondsLeft()/60 + " minutes " + currentStudent.getSecondsLeft()%60 + " seconds");
 				playsLeft.setText("Plays left: " + (2-currentStudent.getSongsPlayedToday()));
 			}
+			else if(!validated){
+				JOptionPane.showMessageDialog(login, "Invalid username or password.");
+			}
 		}
 	}
+	
+	/*LogoutListener logs out the current user and allows a different user to log in. It sets
+	 *all the labels to empty string and sets the currentStudent to null so you must log in
+	 *again before you can start playing more songs.
+	 */
 	
 	private class LogoutListener implements ActionListener
 	{
@@ -220,6 +247,11 @@ public class JukeboxGUI extends JFrame{
 		}
 	}
 	
+	/*ClickListener adds the song clicked to the queue so that it can be played next.
+	 *It also updates the song play count, the students play count, the students minutes
+	 *left and updates all the labels to reflect these changes.
+	 */
+	
 	private class ClickListener implements MouseListener{
 
 		@Override
@@ -228,47 +260,34 @@ public class JukeboxGUI extends JFrame{
 			Song nextSong = songs.getElementAt(row);
 			
 			if (isSongPlayable(nextSong)){
+				
 				currentStudent.playSong(nextSong,currentDate, songs, students);
-
 				playList.queueUpNextSong(nextSong);
 				minsLeft.setText("Minutes left: " + currentStudent.getSecondsLeft()/60 + " minutes " + currentStudent.getSecondsLeft()%60 + " seconds");
 				playsLeft.setText("Plays left: " + (2-currentStudent.getSongsPlayedToday()));
 				queueText.setText(playList.toString());
-
 			}
-			
-			
 		}
 
 		@Override
-		public void mouseEntered(MouseEvent arg0) {
-			
-			
-		}
+		public void mouseEntered(MouseEvent arg0) {}
 
 		@Override
-		public void mouseExited(MouseEvent arg0) {
-			
-			
-		}
+		public void mouseExited(MouseEvent arg0) {}
 
 		@Override
-		public void mousePressed(MouseEvent arg0) {
-			
-			
-		}
+		public void mousePressed(MouseEvent arg0) {}
 
 		@Override
-		public void mouseReleased(MouseEvent arg0) {
-			
-			
-		}
-		
-
+		public void mouseReleased(MouseEvent arg0) {}
 	}
 	
+	/*saveData() writes the current student collection and song collection to an output file
+	 *so that the jukeBox is persistent and Ali cannot play 3 songs in one day :P
+	 */
 	
 	public void saveData(){
+		
 		try{
 			FileOutputStream outStream = new FileOutputStream(new File("jukeboxdata.dat"));
 			ObjectOutputStream outObject = new ObjectOutputStream(outStream);
@@ -281,7 +300,12 @@ public class JukeboxGUI extends JFrame{
 		}
 	}
 	
+	/*loadData reads in the saved song collection and student collection and sets the current
+	 *student collection and song data to the old one, thus the jukeBox maintains its persistence.
+	 */
+	
 	public boolean loadData(){
+		
 		try{
 			FileInputStream inStream = new FileInputStream(new File("jukeboxdata.dat"));
 			ObjectInputStream inObject = new ObjectInputStream(inStream);
@@ -290,26 +314,26 @@ public class JukeboxGUI extends JFrame{
 			inObject.close();
 		}
 		catch(Exception e){
-			//errorLabel.setText("Unable to load data");
+			JOptionPane.showMessageDialog(this, "Unable to load data.");
 			return false;
 		}
+		
 		return true;
 	}
 	
+	/*SaveDataListener is the window listener which prompts the user whether or 
+	 *not they want to save their data upon closing the jukeBox. If the user's
+	 *answer is yes then it writes the data to a file. If the user's answer is no
+	 *then the information for that jukeBox instance is not saved.
+	 */
 
 	private class SaveDataListener implements WindowListener{
 
-
+		@Override
+		public void windowActivated(WindowEvent arg0) {}
 
 		@Override
-		public void windowActivated(WindowEvent arg0) {
-
-		}
-
-		@Override
-		public void windowClosed(WindowEvent arg0) {
-
-		}
+		public void windowClosed(WindowEvent arg0) {}
 
 		@Override
 		public void windowClosing(WindowEvent arg0) {
@@ -317,35 +341,18 @@ public class JukeboxGUI extends JFrame{
 			if (answer==JOptionPane.YES_OPTION){
 				saveData();
 			}
-
-		}
-
-
-
-		@Override
-		public void windowDeactivated(WindowEvent arg0) {
-
 		}
 
 		@Override
-		public void windowDeiconified(WindowEvent arg0) {
-
-		}
+		public void windowDeactivated(WindowEvent arg0) {}
 
 		@Override
-		public void windowIconified(WindowEvent arg0) {
-
-		}
+		public void windowDeiconified(WindowEvent arg0) {}
 
 		@Override
-		public void windowOpened(WindowEvent arg0) {
+		public void windowIconified(WindowEvent arg0) {}
 
-		}
+		@Override
+		public void windowOpened(WindowEvent arg0) {}
 	}
-	
-
-	
-	
-	
-	
 }
