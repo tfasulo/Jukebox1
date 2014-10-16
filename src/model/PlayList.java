@@ -7,15 +7,18 @@
 
 package model;
 
+import java.io.Serializable;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
+import java.util.Observable;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import songplayer.EndOfSongEvent;
 import songplayer.EndOfSongListener;
 import songplayer.SongPlayer;
+import view.JukeboxGUI;
 
-public class PlayList {
+public class PlayList extends Observable implements Serializable{
 
 	//global variables for playList
 	
@@ -27,8 +30,9 @@ public class PlayList {
 	
 	//constructor for playList that creates a new concurrentLinkedQueue
 	
-	public PlayList(){
+	public PlayList(JukeboxGUI gui){
 		
+		addObserver(gui);
 		playlist = new ConcurrentLinkedQueue<Song>();
 	}
 	
@@ -45,7 +49,16 @@ public class PlayList {
 			playlist.add(song);
 	}
 	
-	public void play(){}
+	public void play(Song song){
+		if (song!=null){
+			SongPlayer.playFile(waiter, song.getFileName());
+		}
+		
+	}
+	
+	public ConcurrentLinkedQueue<Song> getPlayList(){
+		return playlist;
+	}
 
 	/*This pops the song off the queue at the end of the song. After popping the current song
 	 *that just finished playing off the queue, it checks to see if there is a next song. If there
@@ -53,7 +66,7 @@ public class PlayList {
 	 *another song is added.
 	 */
 	
-	public class ObjectWaitingForSongToEnd implements EndOfSongListener {
+	public class ObjectWaitingForSongToEnd implements EndOfSongListener, Serializable {
 
 		public void songFinishedPlaying(EndOfSongEvent eosEvent) {
 
@@ -62,6 +75,9 @@ public class PlayList {
 			if (playlist.peek()!=null){
 				SongPlayer.playFile(waiter, playlist.peek().getFileName());
 			}
+			
+			setChanged();
+			notifyObservers();
 		}
 	}
 	

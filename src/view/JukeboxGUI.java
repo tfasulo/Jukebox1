@@ -23,7 +23,12 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Calendar;
+import java.util.Collection;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -45,7 +50,7 @@ import model.SongCollection;
 import model.Student;
 import model.StudentCollection;
 
-public class JukeboxGUI extends JFrame{
+public class JukeboxGUI extends JFrame implements Observer{
 
 	//This is the main method to create a new instance of our JukeboxGUI.
 	
@@ -75,9 +80,12 @@ public class JukeboxGUI extends JFrame{
 	private JLabel state = new JLabel("Please login");
 	private JLabel minsLeft = new JLabel("");
 	private JLabel playsLeft = new JLabel("");
-	private PlayList playList = new PlayList();
+	private PlayList playList = new PlayList(this);
 	private JTextArea queueText = new JTextArea();
 	private GregorianCalendar currentDate = new GregorianCalendar();
+	private int lastDayPlayed;
+	private int lastMonthPlayed;
+	private int lastYearPlayed;
 
 	/*JukeboxGUI() is the constructor for our GUI. It allows the user to load the data that they saved
 	 *or to creates a new set of students and songs if data cannot be loaded. It also adds the tables,
@@ -212,13 +220,17 @@ public class JukeboxGUI extends JFrame{
 			
 			String ID = nametext.getText();
 			String pass= passtext.getText();
+
 			
 			validated = reader.validate(ID, pass, students);
 
 			if (validated==true && currentStudent==null){
 				state.setText(ID + " is now logged in.");
 				currentStudent = students.getStudent(ID);
-				minsLeft.setText("Minutes left: " + currentStudent.getSecondsLeft()/60 + " minutes " + currentStudent.getSecondsLeft()%60 + " seconds");
+				int hours = currentStudent.getSecondsLeft()/3600;
+				int minutes = (currentStudent.getSecondsLeft()%3600)/60;
+				int seconds = (currentStudent.getSecondsLeft()%3600)%60;
+				minsLeft.setText("Time Left: " + hours + " hours " + minutes + " minutes " + seconds + " seconds");
 				playsLeft.setText("Plays left: " + (2-currentStudent.getSongsPlayedToday()));
 			}
 			else if(!validated){
@@ -259,14 +271,50 @@ public class JukeboxGUI extends JFrame{
 			int row = table.rowAtPoint(arg0.getPoint());
 			Song nextSong = songs.getElementAt(row);
 			
+			/* This if/else block checks if it is a new day,
+			 * if it isn't, do nothing,
+			 * if it is, reset all the song plays and all the student's plays.
+			 */
+			
+			if (currentDate.get(Calendar.YEAR)==lastYearPlayed 
+				&& currentDate.get(Calendar.MONTH)==lastMonthPlayed
+				&& currentDate.get(Calendar.DAY_OF_MONTH)==lastDayPlayed){
+					
+			}
+			else{
+					for (Song s : songs.getArrayList()){
+						s.resetPlays();
+					}
+					Collection<Student> collection;
+					collection = students.values();
+					Iterator itr = (Iterator) collection.iterator();
+					while (itr.hasNext()){
+						Student st = (Student) itr.next();
+						st.resetPlays();
+					}
+					lastYearPlayed = currentDate.get(Calendar.YEAR);
+					lastMonthPlayed = currentDate.get(Calendar.MONTH);
+					lastDayPlayed = currentDate.get(Calendar.DAY_OF_MONTH);
+				}
+			
+			/* If the song didn't exceed 5 plays and student didn't play
+			 * more than 2 songs today, then add song to the queue.
+			 */
+			
 			if (isSongPlayable(nextSong)){
-				
-				currentStudent.playSong(nextSong,currentDate, songs, students);
+				currentStudent.playSong(nextSong);//, currentDate, songs, students);
+
 				playList.queueUpNextSong(nextSong);
-				minsLeft.setText("Minutes left: " + currentStudent.getSecondsLeft()/60 + " minutes " + currentStudent.getSecondsLeft()%60 + " seconds");
+				int hours = currentStudent.getSecondsLeft()/3600;
+				int minutes = (currentStudent.getSecondsLeft()%3600)/60;
+				int seconds = (currentStudent.getSecondsLeft()%3600)%60;
+				minsLeft.setText("Time Left: " + hours + " hours " + minutes + " minutes " + seconds + " seconds");
 				playsLeft.setText("Plays left: " + (2-currentStudent.getSongsPlayedToday()));
 				queueText.setText(playList.toString());
+
 			}
+			
+			
 		}
 
 		@Override
@@ -293,6 +341,7 @@ public class JukeboxGUI extends JFrame{
 			ObjectOutputStream outObject = new ObjectOutputStream(outStream);
 			outObject.writeObject(songs);
 			outObject.writeObject(students);
+			outObject.writeObject(playList);
 			outObject.close();
 		}
 		catch(Exception e){
@@ -311,6 +360,7 @@ public class JukeboxGUI extends JFrame{
 			ObjectInputStream inObject = new ObjectInputStream(inStream);
 			songs = (SongCollection)inObject.readObject();
 			students = (StudentCollection)inObject.readObject();
+			playList = (PlayList)inObject.readObject();
 			inObject.close();
 		}
 		catch(Exception e){
@@ -318,6 +368,9 @@ public class JukeboxGUI extends JFrame{
 			return false;
 		}
 		
+		playList.play(playList.getPlayList().peek());
+		queueText.setText(playList.toString());
+
 		return true;
 	}
 	
@@ -354,5 +407,14 @@ public class JukeboxGUI extends JFrame{
 
 		@Override
 		public void windowOpened(WindowEvent arg0) {}
+	}
+	
+	//Update method used to set the text of the current song playing whenever a song ends.
+
+	@Override
+	public void update(Observable arg0, Object arg1) {
+	    PlayList p = (PlayList) arg0;
+	    String queueS = p.toString();
+		queueText.setText(queueS);
 	}
 }

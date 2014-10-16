@@ -94,40 +94,12 @@ public class Student implements Serializable{
 	 *the same, then it continues about normally.
 	 */
 
-	public void playSong(Song song, GregorianCalendar dateplayed, SongCollection songs, StudentCollection students) {
+public void playSong(Song song){
 		
-		if (dateplayed.get(Calendar.YEAR)==lastPlayed.get(Calendar.YEAR) 
-			&& dateplayed.get(Calendar.MONTH)==lastPlayed.get(Calendar.MONTH)
-			&& dateplayed.get(Calendar.DAY_OF_MONTH)==lastPlayed.get(Calendar.DAY_OF_MONTH)){
-			//do nothing
-		}
-		else{
-			
-			for (Song s : songs.getArrayList()){
-				s.resetPlays();
-			}
-			
-			Collection<Student> collection;
-			collection = students.values();
-			Iterator itr = (Iterator) collection.iterator();
-			
-			while (itr.hasNext()){
-				Student st = (Student) itr.next();
-				st.resetPlays();
-				st.lastPlayed = dateplayed;
-			}
-		}
-		
-		if (songsPlayedToday<2)
-		{
-			if (song.getPlaysToday()<5)
-			{
-				songsPlayedToday++;
-				song.played();
-				secondsLeft-=song.getTime();
-			}
-		}
-	}
+		songsPlayedToday++;
+		song.played();
+		secondsLeft-=song.getTime();
+}
 	
 	//resets the songs that a student has played on a given day if the calendar date changes.
 	
